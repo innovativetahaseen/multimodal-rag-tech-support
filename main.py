@@ -1,18 +1,12 @@
-from src.config import (
-    MODEL_NAME,
-    MANUALS_DIR,
-    IMAGES_DIR,
-    CHROMA_DB_DIR,
-    GROQ_API_KEY,
-)
+from src.loaders.pdf_loader import PDFLoader
 
-print("Configuration Loaded Successfully")
-print(f"Model: {MODEL_NAME}")
-print(f"Manuals: {MANUALS_DIR}")
-print(f"Images: {IMAGES_DIR}")
-print(f"ChromaDB: {CHROMA_DB_DIR}")
+loader = PDFLoader()
 
-if GROQ_API_KEY:
-    print("Groq API Key Loaded")
-else:
-    print("Groq API Key Not Found")
+documents = loader.load("data/manuals/sample_manual.pdf")
+
+print(f"Pages Loaded: {len(documents)}")
+
+if documents:
+    print(f"Source: {documents[0].source}")
+    print(f"Page: {documents[0].page}")
+    print(documents[0].content[:300])

@@ -1,18 +1,16 @@
+from src.llm.groq_client import GroqClient
 from src.rag.retriever import Retriever
 
 retriever = Retriever()
+llm = GroqClient()
 
-query = "How do I clear a paper jam?"
+question = "How do I clear a paper jam?"
 
-results = retriever.search(query)
+results = retriever.search(question)
 
-print("\nTop Results:\n")
+context = "\n\n".join(results["documents"][0])
 
-for i, document in enumerate(results["documents"][0], start=1):
-    metadata = results["metadatas"][0][i - 1]
+answer = llm.generate(question, context)
 
-    print(f"Result {i}")
-    print(f"Source : {metadata['source']}")
-    print(f"Page   : {metadata['page']}")
-    print(document[:300])
-    print("-" * 60)
+print("\nAnswer:\n")
+print(answer)

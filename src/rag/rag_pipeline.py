@@ -11,11 +11,14 @@ class RAGPipeline:
         self,
         question: str,
         image_caption: str | None = None,
-    ) -> str:
+    ) -> dict:
 
         results = self.retriever.search(question)
 
-        context = "\n\n".join(results["documents"][0])
+        documents = results["documents"][0]
+        metadatas = results["metadatas"][0]
+
+        context = "\n\n".join(documents)
 
         answer = self.llm.generate(
             question=question,
@@ -23,4 +26,17 @@ class RAGPipeline:
             image_caption=image_caption,
         )
 
-        return answer
+        sources = []
+
+        for metadata in metadatas:
+            sources.append(
+                {
+                    "source": metadata.get("source", "Unknown"),
+                    "page": metadata.get("page", "Unknown"),
+                }
+            )
+
+        return {
+            "answer": answer,
+            "sources": sources,
+        }

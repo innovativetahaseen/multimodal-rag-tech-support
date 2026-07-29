@@ -10,7 +10,12 @@ class Retriever:
         self.collection = self.client.get_collection("technical_support")
         self.embedding_model = EmbeddingModel()
 
-    def search(self, query: str, top_k: int = 3):
+    def search(self, query: str, top_k: int = 3) -> dict:
+        """
+        Search the vector database and return the top matching documents
+        along with their metadata.
+        """
+
         query_embedding = self.embedding_model.encode([query])[0]
 
         results = self.collection.query(

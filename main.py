@@ -1,20 +1,18 @@
-from src.loaders.pdf_loader import PDFLoader
-from src.rag.text_splitter import TextSplitter
-from src.rag.embeddings import EmbeddingModel
-from src.rag.vector_store import VectorStore
+from src.rag.retriever import Retriever
 
-loader = PDFLoader()
-splitter = TextSplitter()
-embedding_model = EmbeddingModel()
-vector_store = VectorStore()
+retriever = Retriever()
 
-documents = loader.load("data/manuals/sample_manual.pdf")
-chunks = splitter.split(documents)
+query = "How do I clear a paper jam?"
 
-texts = [chunk.content for chunk in chunks]
-embeddings = embedding_model.encode(texts)
+results = retriever.search(query)
 
-vector_store.add_documents(chunks, embeddings)
+print("\nTop Results:\n")
 
-print("✅ Documents stored successfully in ChromaDB!")
-print(f"Stored {len(chunks)} chunks.")
+for i, document in enumerate(results["documents"][0], start=1):
+    metadata = results["metadatas"][0][i - 1]
+
+    print(f"Result {i}")
+    print(f"Source : {metadata['source']}")
+    print(f"Page   : {metadata['page']}")
+    print(document[:300])
+    print("-" * 60)

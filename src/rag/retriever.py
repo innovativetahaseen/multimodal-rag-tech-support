@@ -1,31 +1,35 @@
 import chromadb
+from chromadb.errors import NotFoundError
 
 from src.config import CHROMA_DB_DIR
 from src.rag.embeddings import EmbeddingModel
-from src.rag.setup_vector_db import initialize_vector_database
 
 
 class Retriever:
     def __init__(self):
 
-        # Initialize the vector database if it doesn't exist
-        initialize_vector_database()
-
         self.client = chromadb.PersistentClient(
             path=str(CHROMA_DB_DIR)
         )
 
-        self.collection = self.client.get_collection(
-            "technical_support"
-        )
+        try:
+            self.collection = self.client.get_collection(
+                "technical_support"
+            )
+
+        except NotFoundError:
+            raise RuntimeError(
+                "Vector database not found. "
+                "Please initialize the vector database before searching."
+            )
 
         self.embedding_model = EmbeddingModel()
 
-    def search(self, query: str, top_k: int = 3) -> dict:
-        """
-        Search the vector database and return the top matching documents
-        along with their metadata.
-        """
+    def search(
+        self,
+        query: str,
+        top_k: int = 3,
+    ) -> dict:
 
         query_embedding = self.embedding_model.encode([query])[0]
 

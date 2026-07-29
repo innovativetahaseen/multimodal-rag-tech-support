@@ -2,12 +2,21 @@ import streamlit as st
 
 from src.loaders.image_loader import ImageLoader
 from src.rag.rag_pipeline import RAGPipeline
+from src.rag.setup_vector_db import initialize_vector_database
+
+initialize_vector_database()
 
 st.set_page_config(
     page_title="Technical Support Assistant",
     page_icon="🛠️",
     layout="centered",
 )
+@st.cache_resource
+def setup_database():
+    initialize_vector_database()
+
+
+setup_database()
 
 # =====================================================
 # Header

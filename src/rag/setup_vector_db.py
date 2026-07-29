@@ -11,33 +11,46 @@ from src.rag.vector_store import VectorStore
 
 def initialize_vector_database():
 
-    client = chromadb.PersistentClient(path=str(CHROMA_DB_DIR))
+    client = chromadb.PersistentClient(
+        path=str(CHROMA_DB_DIR)
+    )
 
-    try:
-        client.get_collection("technical_support")
-        print("Vector database already exists.")
-        return
+    # Check whether the collection already exists
+    collections = client.list_collections()
 
-    except Exception:
-        print("Creating vector database...")
+    for collection in collections:
+        if collection.name == "technical_support":
+            print("Vector database already exists.")
+            return
+
+    print("Creating vector database...")
 
     pdf_path = Path("data/manuals/sample_manual.pdf")
 
+    if not pdf_path.exists():
+        raise FileNotFoundError(
+            f"PDF not found: {pdf_path}"
+        )
+
+    # Load PDF
     loader = PDFLoader()
     documents = loader.load(str(pdf_path))
 
+    # Split into chunks
     splitter = TextSplitter()
     chunks = splitter.split(documents)
 
+    # Generate embeddings
     embedding_model = EmbeddingModel()
     embeddings = embedding_model.encode(
         [chunk.content for chunk in chunks]
     )
 
+    # Store in ChromaDB
     vector_store = VectorStore()
     vector_store.add_documents(
-        chunks,
-        embeddings,
+        documents=chunks,
+        embeddings=embeddings,
     )
 
     print("Vector database created successfully.")

@@ -6,6 +6,16 @@ The application combines **semantic document retrieval**, **image understanding*
 
 ---
 
+## 🚀 Live Demo
+
+🌐 **Try the Application:**  
+👉 **https://multimodal-rag-tech-support-cxa8zcqmadphspoz88jhnm.streamlit.app**
+
+📂 **GitHub Repository:**  
+👉 **https://github.com/innovativetahaseen/multimodal-rag-tech-support**
+
+---
+
 ## 🚀 Features
 
 - 📄 Extracts knowledge from PDF product manuals
@@ -175,6 +185,18 @@ streamlit run app.py
 
 ---
 
+## 🧪 How to Test
+
+1. Open the **Live Demo**.
+2. (Optional) Upload a printer/product image.
+3. Ask questions like:
+   - **How do I clear a paper jam?**
+   - **How do I replace the toner cartridge?**
+   - **How do I load paper into the tray?**
+4. Review the generated answer and the referenced manual pages.
+
+---
+
 ## 💡 Example Workflow
 
 **Question**
@@ -239,7 +261,8 @@ images/sources.png
 
 AI & Machine Learning Engineer
 
-GitHub: https://github.com/innovativetahaseen
+- GitHub: https://github.com/innovativetahaseen
+- LinkedIn: *(Add your LinkedIn profile here)*
 
 ---
 

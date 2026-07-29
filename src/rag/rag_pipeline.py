@@ -7,7 +7,12 @@ class RAGPipeline:
         self.retriever = Retriever()
         self.llm = GroqClient()
 
-    def ask(self, question: str) -> str:
+    def ask(
+        self,
+        question: str,
+        image_caption: str | None = None,
+    ) -> str:
+
         results = self.retriever.search(question)
 
         context = "\n\n".join(results["documents"][0])
@@ -15,6 +20,7 @@ class RAGPipeline:
         answer = self.llm.generate(
             question=question,
             context=context,
+            image_caption=image_caption,
         )
 
         return answer
